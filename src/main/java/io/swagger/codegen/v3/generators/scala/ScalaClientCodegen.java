@@ -1,8 +1,7 @@
 package io.swagger.codegen.v3.generators.scala;
 
 import com.github.jknack.handlebars.Lambda;
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
+import com.github.jknack.handlebars.Template;
 import io.swagger.codegen.v3.CliOption;
 import io.swagger.codegen.v3.CodegenConstants;
 import io.swagger.codegen.v3.CodegenProperty;
@@ -62,10 +61,11 @@ public class ScalaClientCodegen extends AbstractScalaCodegen {
         additionalProperties.put("authScheme", authScheme);
         additionalProperties.put("authPreemptive", authPreemptive);
         additionalProperties.put("clientName", clientName);
-        additionalProperties.put("fnEnumEntry", new Mustache.Lambda() {
+        additionalProperties.put("fnEnumEntry", new Lambda<Object, Object>() {
             @Override
-            public void execute(Template.Fragment fragment, Writer writer) throws IOException {
-                writer.write(formatIdentifier(fragment.execute(), true));
+            public Object apply(Object o, Template template) throws IOException {
+                String text = template.apply(o);
+                return formatIdentifier(text, true);
             }
         });
 
